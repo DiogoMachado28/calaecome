@@ -72,7 +72,10 @@
       font-family: inherit; font-size: 13px; font-weight: 500;
       color: var(--text-secondary); cursor: pointer;
       transition: color 0.15s, border-color 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      line-height: 1;
     }
+    .tab-btn span.tab-icon { font-size: 15px; line-height: 1; display: flex; align-items: center; }
     .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
 
     /* ── PAGES ── */
@@ -347,10 +350,10 @@
 
   <!-- TABS -->
   <nav class="tabs">
-    <button class="tab-btn active" onclick="switchTab('sorte')">🎲 Sortear</button>
-    <button class="tab-btn" onclick="switchTab('refeicoes')">🍽️ Refeições</button>
-    <button class="tab-btn" onclick="switchTab('sobremesas')">🍰 Sobremesas</button>
-    <button class="tab-btn" onclick="switchTab('historico')">📅 Histórico</button>
+    <button class="tab-btn active" onclick="switchTab('sorte')"><span class="tab-icon">🎲</span> Sortear</button>
+    <button class="tab-btn" onclick="switchTab('refeicoes')"><span class="tab-icon">🍽️</span> Refeições</button>
+    <button class="tab-btn" onclick="switchTab('sobremesas')"><span class="tab-icon">🍰</span> Sobremesas</button>
+    <button class="tab-btn" onclick="switchTab('historico')"><span class="tab-icon">📅</span> Histórico</button>
   </nav>
 
   <!-- ══ PAGE: SORTEAR ══════════════════════════════════════════════════════ -->
