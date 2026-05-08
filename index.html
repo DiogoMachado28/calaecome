@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>come & cala 🍽️🗣️</title>
+  <title>Come & Cala</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -13,7 +13,7 @@
     :root {
       --bg: #F7F6F2;
       --surface: #FFFFFF;
-      --border: rgba(0,0,0,0.1);
+      --border: rgba(0,0,0,0.09);
       --border-strong: rgba(0,0,0,0.18);
       --text-primary: #1A1A18;
       --text-secondary: #6B6B67;
@@ -24,504 +24,717 @@
       --gold: #B8860B;
       --gold-light: #FFF8E1;
       --gold-text: #7A5800;
+      --pink: #C2185B;
+      --pink-light: #FCE4EC;
+      --pink-text: #880E4F;
+      --red: #E53935;
       --radius-md: 10px;
       --radius-lg: 16px;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #141412;
-        --surface: #1E1E1C;
-        --border: rgba(255,255,255,0.1);
-        --border-strong: rgba(255,255,255,0.2);
-        --text-primary: #F0EFE9;
-        --text-secondary: #8A8A85;
-        --green-light: #0a2e22;
-        --green-text: #4DC99A;
-        --gold-light: #2a1f00;
-        --gold-text: #F5C842;
+        --bg: #141412; --surface: #1E1E1C;
+        --border: rgba(255,255,255,0.09); --border-strong: rgba(255,255,255,0.2);
+        --text-primary: #F0EFE9; --text-secondary: #8A8A85;
+        --green-light: #0a2e22; --green-text: #4DC99A;
+        --gold-light: #2a1f00; --gold-text: #F5C842;
+        --pink-light: #2a0012; --pink-text: #F48FB1;
       }
     }
 
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 2rem 1rem 4rem;
+      background: var(--bg); color: var(--text-primary);
+      min-height: 100vh; display: flex;
+      align-items: flex-start; justify-content: center;
     }
 
-    .app { width: 100%; max-width: 420px; }
+    .app { width: 100%; max-width: 460px; }
 
-    header { margin-bottom: 2.5rem; }
-    header h1 { font-size: 26px; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
-    header p { font-size: 15px; color: var(--text-secondary); }
+    /* ── TABS ── */
+    .tabs {
+      position: sticky; top: 0; z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex; padding: 0 1rem;
+    }
+    .tab-btn {
+      flex: 1; padding: 1rem 0.5rem 0.85rem;
+      background: none; border: none; border-bottom: 2px solid transparent;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      color: var(--text-secondary); cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
 
-    .step { margin-bottom: 2rem; }
+    /* ── PAGES ── */
+    .page { display: none; padding: 1.5rem 1rem 4rem; }
+    .page.active { display: block; }
+
+    /* ── HEADER ── */
+    header { margin-bottom: 2rem; }
+    header h1 { font-size: 24px; font-weight: 600; margin-bottom: 0.2rem; }
+    header p { font-size: 14px; color: var(--text-secondary); }
+
+    /* ── STEP LABEL ── */
     .step-label {
       font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.75rem;
     }
 
-    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-
-    .option-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1rem;
-      cursor: pointer;
-      text-align: left;
-      transition: border-color 0.15s, background 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: inherit;
-      color: var(--text-primary);
-    }
-    .option-btn:hover { border-color: var(--border-strong); background: var(--bg); }
-    .option-btn.selected { border: 2px solid var(--green); background: var(--green-light); }
-    .option-btn .icon { font-size: 24px; line-height: 1; }
-    .option-btn .label { font-size: 15px; font-weight: 500; color: var(--text-primary); display: block; }
-    .option-btn .sublabel { font-size: 12px; color: var(--text-secondary); display: block; margin-top: 2px; }
-    .option-btn.selected .label { color: var(--green-text); }
-    .option-btn.selected .sublabel { color: var(--green); }
+    /* ── GRID BUTTONS ── */
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-bottom: 1.75rem; }
     .full-col { grid-column: 1 / -1; }
 
-    .divider { height: 1px; background: var(--border); margin: 0.5rem 0 2rem; }
+    .option-btn {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 0.9rem 1rem;
+      cursor: pointer; text-align: left;
+      transition: border-color 0.15s, background 0.15s;
+      display: flex; align-items: center; gap: 10px;
+      font-family: inherit; color: var(--text-primary);
+    }
+    .option-btn:hover { border-color: var(--border-strong); }
+    .option-btn.selected { border: 2px solid var(--green); background: var(--green-light); }
+    .option-btn .icon { font-size: 22px; line-height: 1; }
+    .option-btn .label { font-size: 14px; font-weight: 500; display: block; }
+    .option-btn .sublabel { font-size: 11px; color: var(--text-secondary); display: block; margin-top: 1px; }
+    .option-btn.selected .label { color: var(--green-text); }
 
+    /* ── MAIN BUTTON ── */
     .btn-main {
-      width: 100%; padding: 1rem; border-radius: var(--radius-lg);
+      width: 100%; padding: 0.95rem; border-radius: var(--radius-lg);
       background: var(--green); color: white; border: none;
-      font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit;
+      font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
       transition: background 0.15s, transform 0.1s;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
     .btn-main:hover { background: var(--green-dark); }
     .btn-main:active { transform: scale(0.98); }
 
-    .btn-extraordinary {
+    .btn-gold {
       width: 100%; padding: 0.85rem; border-radius: var(--radius-lg);
       background: transparent; border: 1px solid var(--gold);
-      font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit;
-      color: var(--gold-text);
-      transition: background 0.15s;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      margin-top: 0.75rem;
+      font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit;
+      color: var(--gold-text); transition: background 0.15s; margin-top: 0.6rem;
     }
-    .btn-extraordinary:hover { background: var(--gold-light); }
+    .btn-gold:hover { background: var(--gold-light); }
 
+    .btn-pink {
+      width: 100%; padding: 0.85rem; border-radius: var(--radius-lg);
+      background: transparent; border: 1px solid var(--pink);
+      font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit;
+      color: var(--pink-text); transition: background 0.15s; margin-top: 0.6rem;
+    }
+    .btn-pink:hover { background: var(--pink-light); }
+
+    .btn-reset {
+      width: 100%; padding: 0.75rem; border-radius: var(--radius-lg);
+      background: transparent; border: 1px solid var(--border);
+      font-size: 13px; color: var(--text-secondary); cursor: pointer;
+      font-family: inherit; transition: background 0.15s; margin-top: 0.6rem;
+    }
+    .btn-reset:hover { background: var(--surface); }
+
+    /* ── RESULT CARD ── */
     .result-card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 1.5rem; margin-top: 1.5rem;
-      animation: fadeUp 0.35s ease;
+      border-radius: var(--radius-lg); padding: 1.4rem; margin-top: 1.25rem;
+      animation: fadeUp 0.3s ease;
     }
-    .result-card.extraordinary { border-color: var(--gold); background: var(--gold-light); }
+    .result-card.gold { border-color: var(--gold); background: var(--gold-light); }
+    .result-card.pink { border-color: var(--pink); background: var(--pink-light); }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .result-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); margin-bottom: 0.6rem; }
-    .result-card.extraordinary .result-tag { color: var(--gold); }
-    .result-name { font-size: 20px; font-weight: 600; color: var(--text-primary); margin-bottom: 1rem; line-height: 1.35; }
+    .result-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); margin-bottom: 0.5rem; }
+    .result-card.gold .result-tag { color: var(--gold); }
+    .result-card.pink .result-tag { color: var(--pink); }
+    .result-name { font-size: 19px; font-weight: 600; line-height: 1.3; margin-bottom: 0.9rem; }
+    .pills { display: flex; flex-wrap: wrap; gap: 5px; }
+    .pill { font-size: 11px; padding: 3px 10px; border-radius: 999px; background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
 
-    .pills { display: flex; flex-wrap: wrap; gap: 6px; }
-    .pill { font-size: 12px; padding: 4px 12px; border-radius: 999px; background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
-
-    .recipe-toggle {
-      margin-top: 1rem; width: 100%; padding: 0.65rem;
+    /* ── RECIPE ── */
+    .btn-recipe {
+      margin-top: 0.9rem; width: 100%; padding: 0.6rem;
       border-radius: var(--radius-md); background: transparent;
-      border: 1px solid var(--gold); font-size: 13px; font-weight: 500;
+      border: 1px solid var(--gold); font-size: 12px; font-weight: 500;
       color: var(--gold-text); cursor: pointer; font-family: inherit;
-      transition: background 0.15s;
     }
-    .recipe-toggle:hover { background: rgba(184,134,11,0.08); }
+    .btn-recipe.pink-r { border-color: var(--pink); color: var(--pink-text); }
     .recipe-body {
       margin-top: 0.75rem; padding-top: 0.75rem;
       border-top: 1px solid var(--border);
-      font-size: 14px; color: var(--text-secondary);
-      line-height: 1.7; white-space: pre-wrap;
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.75; white-space: pre-wrap;
     }
 
-    .no-match { text-align: center; padding: 1.5rem; color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
-    .no-match .emoji { font-size: 32px; display: block; margin-bottom: 0.5rem; }
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); margin: 0.25rem 0 1.75rem; }
 
-    .btn-reset {
-      margin-top: 0.75rem; width: 100%; padding: 0.8rem;
-      border-radius: var(--radius-lg); background: transparent;
-      border: 1px solid var(--border); font-size: 14px;
-      color: var(--text-secondary); cursor: pointer; font-family: inherit;
-      transition: background 0.15s, border-color 0.15s;
+    /* ── MANAGE PAGE ── */
+    .section-title {
+      font-size: 15px; font-weight: 600; margin-bottom: 1rem; margin-top: 1.5rem;
     }
-    .btn-reset:hover { background: var(--surface); border-color: var(--border-strong); }
+    .section-title:first-child { margin-top: 0; }
+
+    .meal-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+    .meal-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 0.85rem 1rem;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem;
+    }
+    .meal-item.gold-item { border-left: 3px solid var(--gold); }
+    .meal-item.pink-item { border-left: 3px solid var(--pink); }
+    .meal-info { flex: 1; }
+    .meal-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .meal-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .meal-tag { font-size: 10px; padding: 2px 8px; border-radius: 999px; background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
+    .btn-delete {
+      background: none; border: none; cursor: pointer; color: var(--text-secondary);
+      font-size: 16px; padding: 2px; line-height: 1; flex-shrink: 0;
+      transition: color 0.15s;
+    }
+    .btn-delete:hover { color: var(--red); }
+
+    /* ── ADD FORM ── */
+    .add-form {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.5rem;
+    }
+    .add-form h3 { font-size: 14px; font-weight: 600; margin-bottom: 1rem; }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { font-size: 12px; font-weight: 500; color: var(--text-secondary); display: block; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%; padding: 0.65rem 0.85rem;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius-md); font-family: inherit; font-size: 14px;
+      color: var(--text-primary); transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--green); }
+    .form-textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+    .checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .checkbox-label {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; cursor: pointer; padding: 0.5rem 0.75rem;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius-md); transition: border-color 0.15s, background 0.15s;
+    }
+    .checkbox-label:has(input:checked) { border-color: var(--green); background: var(--green-light); color: var(--green-text); font-weight: 500; }
+    .checkbox-label input { width: 14px; height: 14px; accent-color: var(--green); }
+
+    .btn-add {
+      width: 100%; padding: 0.8rem; border-radius: var(--radius-md);
+      background: var(--green); color: white; border: none;
+      font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: background 0.15s;
+    }
+    .btn-add:hover { background: var(--green-dark); }
+    .btn-add.gold-add { background: var(--gold); }
+    .btn-add.gold-add:hover { background: #8a6508; }
+    .btn-add.pink-add { background: var(--pink); }
+    .btn-add.pink-add:hover { background: var(--pink-text); }
+
+    .toast {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      background: #1A1A18; color: white; padding: 0.65rem 1.25rem;
+      border-radius: 999px; font-size: 13px; font-weight: 500;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      white-space: nowrap; z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+
+    .loading { text-align: center; padding: 2rem; color: var(--text-secondary); font-size: 14px; }
+    .empty-state { text-align: center; padding: 2rem 1rem; color: var(--text-secondary); font-size: 14px; line-height: 1.6; }
+    .empty-state .emoji { font-size: 28px; display: block; margin-bottom: 0.5rem; }
 
     #step2, #step3, #divider2 { display: none; }
+
+    /* recipe edit in manage */
+    .recipe-edit-wrap { margin-top: 0.5rem; }
+    .btn-edit-recipe {
+      font-size: 12px; color: var(--gold-text); background: none; border: none;
+      cursor: pointer; font-family: inherit; padding: 0; text-decoration: underline;
+    }
+    .btn-edit-recipe.pink-e { color: var(--pink-text); }
   </style>
 </head>
 <body>
-  <main class="app">
+<div class="app">
+
+  <!-- TABS -->
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="switchTab('sorte')">🎲 Sortear</button>
+    <button class="tab-btn" onclick="switchTab('refeicoes')">🍽️ Refeições</button>
+    <button class="tab-btn" onclick="switchTab('sobremesas')">🍰 Sobremesas</button>
+  </nav>
+
+  <!-- ══ PAGE: SORTEAR ══════════════════════════════════════════════════════ -->
+  <div class="page active" id="page-sorte">
     <header>
-      <h1>come & cala 🍽️🗣️</h1>
+      <h1>Come &amp; Cala 🍽️🗣️</h1>
       <p>Escolhe a base e a proteína.</p>
     </header>
 
-    <section class="step" id="step1">
+    <section id="step1">
       <p class="step-label">1 · base</p>
       <div class="grid" id="base-grid">
         <button class="option-btn" data-val="arroz" onclick="selectBase(this)">
-          <span class="icon">🍚</span>
-          <span><span class="label">Arroz</span></span>
+          <span class="icon">🍚</span><span><span class="label">Arroz</span></span>
         </button>
         <button class="option-btn" data-val="massa" onclick="selectBase(this)">
-          <span class="icon">🍝</span>
-          <span><span class="label">Massa</span></span>
+          <span class="icon">🍝</span><span><span class="label">Massa</span></span>
         </button>
         <button class="option-btn" data-val="batata" onclick="selectBase(this)">
-          <span class="icon">🥔</span>
-          <span><span class="label">Batata</span></span>
+          <span class="icon">🥔</span><span><span class="label">Batata</span></span>
         </button>
         <button class="option-btn" data-val="outro" onclick="selectBase(this)">
-          <span class="icon">🥙</span>
-          <span><span class="label">Outro</span></span>
+          <span class="icon">🥙</span><span><span class="label">Outro</span></span>
         </button>
         <button class="option-btn full-col" data-val="aleatorio" onclick="selectBase(this)">
           <span class="icon">🎲</span>
-          <span>
-            <span class="label">Aleatório</span>
-            <span class="sublabel">escolha aleatória</span>
-          </span>
+          <span><span class="label">Aleatório</span><span class="sublabel">escolhe a base à sorte</span></span>
         </button>
       </div>
     </section>
 
     <div class="divider" id="divider2"></div>
 
-    <section class="step" id="step2">
+    <section id="step2">
       <p class="step-label">2 · proteína</p>
       <div class="grid" id="protein-grid">
-        <button class="option-btn" data-val="ovo" onclick="selectProtein(this)">
-          <span class="icon">🥚</span>
-          <span><span class="label">Ovo</span></span>
-        </button>
-        <button class="option-btn" data-val="queijo" onclick="selectProtein(this)">
-          <span class="icon">🧀</span>
-          <span><span class="label">Queijo</span></span>
-        </button>
-        <button class="option-btn" data-val="feijao" onclick="selectProtein(this)">
-          <span class="icon">🌱</span>
-          <span><span class="label">Feijão</span></span>
-        </button>
-        <button class="option-btn" data-val="grao" onclick="selectProtein(this)">
-          <span class="icon">🌾</span>
-          <span><span class="label">Grão</span></span>
-        </button>
-        <button class="option-btn" data-val="ervilhas" onclick="selectProtein(this)">
-          <span class="icon">🫛</span>
-          <span><span class="label">Ervilhas</span></span>
-        </button>
-        <button class="option-btn" data-val="atum" onclick="selectProtein(this)">
-          <span class="icon">🐟</span>
-          <span><span class="label">Atum</span></span>
-        </button>
-        <button class="option-btn" data-val="camarao" onclick="selectProtein(this)">
-          <span class="icon">🦐</span>
-          <span><span class="label">Camarão</span></span>
-        </button>
-        <button class="option-btn" data-val="bacalhau" onclick="selectProtein(this)">
-          <span class="icon">🐠</span>
-          <span><span class="label">Bacalhau</span></span>
-        </button>
-        <button class="option-btn" data-val="frango" onclick="selectProtein(this)">
-          <span class="icon">🍗</span>
-          <span><span class="label">Frango</span></span>
-        </button>
-        <button class="option-btn" data-val="carne_picada" onclick="selectProtein(this)">
-          <span class="icon">🥩</span>
-          <span><span class="label">Carne picada</span></span>
-        </button>
+        <button class="option-btn" data-val="ovo" onclick="selectProtein(this)"><span class="icon">🥚</span><span><span class="label">Ovo</span></span></button>
+        <button class="option-btn" data-val="queijo" onclick="selectProtein(this)"><span class="icon">🧀</span><span><span class="label">Queijo</span></span></button>
+        <button class="option-btn" data-val="feijao" onclick="selectProtein(this)"><span class="icon">🌱</span><span><span class="label">Feijão</span></span></button>
+        <button class="option-btn" data-val="grao" onclick="selectProtein(this)"><span class="icon">🌾</span><span><span class="label">Grão</span></span></button>
+        <button class="option-btn" data-val="ervilhas" onclick="selectProtein(this)"><span class="icon">🟢</span><span><span class="label">Ervilhas</span></span></button>
+        <button class="option-btn" data-val="atum" onclick="selectProtein(this)"><span class="icon">🐟</span><span><span class="label">Atum</span></span></button>
+        <button class="option-btn" data-val="camarao" onclick="selectProtein(this)"><span class="icon">🦐</span><span><span class="label">Camarão</span></span></button>
+        <button class="option-btn" data-val="bacalhau" onclick="selectProtein(this)"><span class="icon">🐠</span><span><span class="label">Bacalhau</span></span></button>
+        <button class="option-btn" data-val="frango" onclick="selectProtein(this)"><span class="icon">🍗</span><span><span class="label">Frango</span></span></button>
+        <button class="option-btn" data-val="carne_picada" onclick="selectProtein(this)"><span class="icon">🥩</span><span><span class="label">Carne picada</span></span></button>
         <button class="option-btn full-col" data-val="aleatorio" onclick="selectProtein(this)">
           <span class="icon">🎲</span>
-          <span>
-            <span class="label">Aleatório</span>
-            <span class="sublabel">escolha aleatória</span>
-          </span>
+          <span><span class="label">Aleatório</span><span class="sublabel">escolha aleatória</span></span>
         </button>
       </div>
     </section>
 
-    <section class="step" id="step3">
+    <section id="step3">
       <button class="btn-main" onclick="findDish()">✨ Ver prato</button>
-      <button class="btn-extraordinary" onclick="showExtraordinary()">⭐ Ocasião especial</button>
+      <button class="btn-gold" onclick="findExtraordinary()">⭐ Ocasião especial</button>
     </section>
 
     <div id="result-area"></div>
-  </main>
+  </div>
 
-  <script>
-    // ─── BASE DE DADOS ────────────────────────────────────────────────────────
-    // Campos:
-    //   name          → nome do prato
-    //   base          → array: "arroz", "massa", "batata", "outro"
-    //   proteins      → array: "ovo","queijo","feijao","grao","ervilhas",
-    //                          "atum","camarao","bacalhau","frango","carne_picada"
-    //   extraordinary → true se for prato especial
-    //   recipe        → string com a receita (só extraordinários; deixar "" se não tiver)
+  <!-- ══ PAGE: REFEIÇÕES ═══════════════════════════════════════════════════ -->
+  <div class="page" id="page-refeicoes">
+    <header>
+      <h1>Refeições</h1>
+      <p>Gere os pratos e os especiais.</p>
+    </header>
 
-    const meals = [
+    <!-- Add normal meal -->
+    <div class="add-form">
+      <h3>➕ Adicionar refeição</h3>
+      <div class="form-group">
+        <label>Nome do prato</label>
+        <input class="form-input" id="meal-name" type="text" placeholder="ex: Arroz com frango e ervilhas" />
+      </div>
+      <div class="form-group">
+        <label>Base</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-label"><input type="checkbox" name="base" value="arroz"> 🍚 Arroz</label>
+          <label class="checkbox-label"><input type="checkbox" name="base" value="massa"> 🍝 Massa</label>
+          <label class="checkbox-label"><input type="checkbox" name="base" value="batata"> 🥔 Batata</label>
+          <label class="checkbox-label"><input type="checkbox" name="base" value="outro"> 🥙 Outro</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Proteína</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="ovo"> 🥚 Ovo</label>
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="queijo"> 🧀 Queijo</label>
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="feijao"> 🌱 Feijão</label>
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="grao"> 🌾 Grão</label>
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="ervilhas"> 🟢 Ervilhas</label>
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="atum"> 🐟 Atum</label>
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="camarao"> 🦐 Camarão</label>
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="bacalhau"> 🐠 Bacalhau</label>
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="frango"> 🍗 Frango</label>
+          <label class="checkbox-label"><input type="checkbox" name="protein" value="carne_picada"> 🥩 Carne picada</label>
+        </div>
+      </div>
+      <button class="btn-add" onclick="addMeal()">Guardar refeição</button>
+    </div>
 
-      // ── MASSA ──────────────────────────────────────────────────────────────
-      {
-        name: "Massa de legumes gratinada no forno",
-        base: ["massa"], proteins: ["queijo"]
-      },
-      {
-        name: "Canelones de cogumelos e espinafres",
-        base: ["massa"], proteins: ["queijo"]
-      },
-      {
-        name: "Massa com camarão, tomate cherry e azeitonas",
-        base: ["massa"], proteins: ["camarao"]
-      },
-      {
-        name: "Massa com atum, pimentos e cogumelos no forno",
-        base: ["massa"], proteins: ["atum"]
-      },
-      {
-        name: "Massa com bechamel, atum e camarões",
-        base: ["massa"], proteins: ["atum", "camarao"]
-      },
-      {
-        name: "Massa com legumes chineses com ovo mexido",
-        base: ["massa"], proteins: ["ovo"]
-      },
-      {
-        name: "Massa de pesto com queijo, espinafres, azeitonas e cogumelos",
-        base: ["massa"], proteins: ["queijo"]
-      },
+    <!-- Add extraordinary -->
+    <div class="add-form">
+      <h3>⭐ Adicionar especial</h3>
+      <div class="form-group">
+        <label>Nome</label>
+        <input class="form-input" id="extra-name" type="text" placeholder="ex: Francesinha" />
+      </div>
+      <div class="form-group">
+        <label>Receita (opcional)</label>
+        <textarea class="form-textarea" id="extra-recipe" placeholder="Ingredientes e passos..."></textarea>
+      </div>
+      <button class="btn-add gold-add" onclick="addExtraordinary()">Guardar especial</button>
+    </div>
 
-      // ── ARROZ ──────────────────────────────────────────────────────────────
-      {
-        name: "Arroz com tomatada de feijão branco e ovo escalfado",
-        base: ["arroz"], proteins: ["feijao", "ovo"]
-      },
-      {
-        name: "Arroz de tomate com pataniscas de legumes",
-        base: ["arroz"], proteins: ["ovo"]
-      },
-      {
-        name: "Arroz com tomate, ervilhas e ovos escalfados",
-        base: ["arroz"], proteins: ["ervilhas", "ovo"]
-      },
-      {
-        name: "Arroz com tomate, grão-de-bico, espinafres e ovos escalfados",
-        base: ["arroz"], proteins: ["grao", "ovo"]
-      },
-      {
-        name: "Arroz com frango agridoce",
-        base: ["arroz"], proteins: ["frango"]
-      },
-      {
-        name: "Arroz com pimentos recheados de carne picada, tomate e queijo",
-        base: ["arroz"], proteins: ["carne_picada", "queijo"]
-      },
-      {
-        name: "Arroz à valenciana (ervilhas, ovo mexido, milho, cogumelos)",
-        base: ["arroz"], proteins: ["ervilhas", "ovo"]
-      },
-      {
-        name: "Bowl de arroz com camarão, pimentos, milho, tomate e espinafres",
-        base: ["arroz"], proteins: ["camarao"]
-      },
+    <!-- Lists -->
+    <p class="section-title">Refeições normais</p>
+    <div class="meal-list" id="meals-list"><div class="loading">A carregar...</div></div>
 
-      // ── BATATA ─────────────────────────────────────────────────────────────
-      {
-        name: "Legumes à Brás",
-        base: ["batata"], proteins: ["ovo"]
-      },
-      {
-        name: "Salada russa com atum e ovo cozido",
-        base: ["batata"], proteins: ["atum", "ovo"]
-      },
-      {
-        name: "Puré com grão-de-bico, leite de coco e manteiga de amendoim",
-        base: ["batata"], proteins: ["grao"]
-      },
-      {
-        name: "Puré com strogonoff de legumes",
-        base: ["batata"], proteins: ["queijo"]
-      },
-      {
-        name: "Batatas no forno com legumes assados",
-        base: ["batata"], proteins: []
-      },
-      {
-        name: "Bowl de batata-doce com ovo cozido, espinafres, cogumelos e queijo feta",
-        base: ["batata"], proteins: ["ovo", "queijo"]
-      },
-      {
-        name: "Batata-doce com frango desfiado e pimentos assados",
-        base: ["batata"], proteins: ["frango"]
-      },
-      {
-        name: "Bacalhau com batatas a murro, azeite e alho",
-        base: ["batata"], proteins: ["bacalhau"]
-      },
+    <p class="section-title">Especiais</p>
+    <div class="meal-list" id="extra-list"><div class="loading">A carregar...</div></div>
+  </div>
 
-      // ── OUTRO ──────────────────────────────────────────────────────────────
-      {
-        name: "Burritos com carne picada, milho, feijão e pimentos",
-        base: ["outro"], proteins: ["carne_picada", "feijao"]
+  <!-- ══ PAGE: SOBREMESAS ══════════════════════════════════════════════════ -->
+  <div class="page" id="page-sobremesas">
+    <header>
+      <h1>Sobremesas 🍰</h1>
+      <p>As vossas receitas doces.</p>
+    </header>
+
+    <!-- Add dessert -->
+    <div class="add-form">
+      <h3>➕ Adicionar sobremesa</h3>
+      <div class="form-group">
+        <label>Nome</label>
+        <input class="form-input" id="dessert-name" type="text" placeholder="ex: Mousse de chocolate" />
+      </div>
+      <div class="form-group">
+        <label>Receita (opcional)</label>
+        <textarea class="form-textarea" id="dessert-recipe" placeholder="Ingredientes e passos..."></textarea>
+      </div>
+      <button class="btn-add pink-add" onclick="addDessert()">Guardar sobremesa</button>
+    </div>
+
+    <p class="section-title">As vossas sobremesas</p>
+    <div class="meal-list" id="desserts-list"><div class="loading">A carregar...</div></div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── SUPABASE CONFIG ──────────────────────────────────────────────────────
+  const SUPABASE_URL = 'https://tckclrijetonwrphccsr.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_RTyt6oGeDUNkntsbQWvjsw_AGGFwIPN';
+
+  async function sb(table, method = 'GET', body = null, extra = '') {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}${extra}`, {
+      method,
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': method === 'POST' ? 'return=representation' : ''
       },
-      {
-        name: "Gnocchi com molho de tomate, manjericão e ovo estrelado",
-        base: ["outro"], proteins: ["ovo"]
-      },
-      {
-        name: "Quiche de legumes",
-        base: ["outro"], proteins: ["ovo", "queijo"]
-      },
-      {
-        name: "Salada de bacalhau com grão, ovo cozido, cebola roxa e azeite",
-        base: ["outro"], proteins: ["bacalhau", "grao", "ovo"]
-      },
+      body: body ? JSON.stringify(body) : null
+    });
+    if (!res.ok) { const e = await res.text(); throw new Error(e); }
+    if (method === 'DELETE') return null;
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+  }
 
-      // ── EXTRAORDINÁRIOS ────────────────────────────────────────────────────
-      // Preenche o campo recipe com o texto da receita quando quiseres.
-      { name: "Carne de porco à alentejana", base: [], proteins: [], extraordinary: true, recipe: "" },
-      { name: "Hambúrgueres",                base: [], proteins: [], extraordinary: true, recipe: "" },
-      { name: "Francesinha",                 base: [], proteins: [], extraordinary: true, recipe: "" },
-      { name: "Wellington Vegetariano",      base: [], proteins: [], extraordinary: true, recipe: "" },
-      { name: "Camarões Salteados",          base: [], proteins: [], extraordinary: true, recipe: "" },
-      { name: "Empadão",                     base: [], proteins: [], extraordinary: true, recipe: "" },
-      { name: "Carbonara",                   base: [], proteins: [], extraordinary: true, recipe: "" },
-    ];
-    // ─────────────────────────────────────────────────────────────────────────
+  // ── LABELS ──────────────────────────────────────────────────────────────
+  const baseLabels = { arroz:'Arroz', massa:'Massa', batata:'Batata', outro:'Outro' };
+  const proteinLabels = {
+    ovo:'Ovo', queijo:'Queijo', feijao:'Feijão', grao:'Grão',
+    ervilhas:'Ervilhas', atum:'Atum', camarao:'Camarão',
+    bacalhau:'Bacalhau', frango:'Frango', carne_picada:'Carne picada'
+  };
+  const bases = ['arroz','massa','batata','outro'];
 
-    const bases = ["arroz", "massa", "batata", "outro"];
-    const baseLabels    = { arroz: "Arroz", massa: "Massa", batata: "Batata", outro: "Outro" };
-    const proteinLabels = {
-      ovo: "Ovo", queijo: "Queijo", feijao: "Feijão", grao: "Grão",
-      ervilhas: "Ervilhas", atum: "Atum", camarao: "Camarão",
-      bacalhau: "Bacalhau", frango: "Frango", carne_picada: "Carne picada"
-    };
+  // ── STATE ────────────────────────────────────────────────────────────────
+  let selectedBase = null, selectedProtein = null;
+  let allMeals = [], allExtra = [], allDesserts = [];
 
-    let selectedBase    = null;
-    let selectedProtein = null;
+  // ── TABS ─────────────────────────────────────────────────────────────────
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+    document.getElementById(`page-${tab}`).classList.add('active');
+  }
 
-    function selectBase(btn) {
-      document.querySelectorAll('#base-grid .option-btn').forEach(b => b.classList.remove('selected'));
-      selectedProtein = null;
-      document.querySelectorAll('#protein-grid .option-btn').forEach(b => b.classList.remove('selected'));
-      document.getElementById('result-area').innerHTML = '';
+  // ── TOAST ────────────────────────────────────────────────────────────────
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
 
-      const val = btn.dataset.val;
+  // ── SORTE: BASE ──────────────────────────────────────────────────────────
+  function selectBase(btn) {
+    document.querySelectorAll('#base-grid .option-btn').forEach(b => b.classList.remove('selected'));
+    selectedProtein = null;
+    document.querySelectorAll('#protein-grid .option-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('result-area').innerHTML = '';
 
-      if (val === 'aleatorio') {
-        selectedBase = bases[Math.floor(Math.random() * bases.length)];
-        const chosenBtn = document.querySelector(`#base-grid [data-val="${selectedBase}"]`);
-        if (chosenBtn) chosenBtn.classList.add('selected');
-      } else {
-        selectedBase = val;
-        btn.classList.add('selected');
-      }
-
-      document.getElementById('divider2').style.display = 'block';
-      document.getElementById('step2').style.display = 'block';
-      document.getElementById('step3').style.display = 'none';
-    }
-
-    function selectProtein(btn) {
-      document.querySelectorAll('#protein-grid .option-btn').forEach(b => b.classList.remove('selected'));
+    if (btn.dataset.val === 'aleatorio') {
+      selectedBase = bases[Math.floor(Math.random() * bases.length)];
+      document.querySelector(`#base-grid [data-val="${selectedBase}"]`).classList.add('selected');
+    } else {
+      selectedBase = btn.dataset.val;
       btn.classList.add('selected');
-      selectedProtein = btn.dataset.val;
-      document.getElementById('result-area').innerHTML = '';
-      document.getElementById('step3').style.display = 'block';
+    }
+    document.getElementById('divider2').style.display = 'block';
+    document.getElementById('step2').style.display = 'block';
+    document.getElementById('step3').style.display = 'none';
+  }
+
+  function selectProtein(btn) {
+    document.querySelectorAll('#protein-grid .option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedProtein = btn.dataset.val;
+    document.getElementById('result-area').innerHTML = '';
+    document.getElementById('step3').style.display = 'block';
+  }
+
+  function findDish() {
+    const area = document.getElementById('result-area');
+    let pool = allMeals.filter(m => m.base && m.base.includes(selectedBase));
+
+    if (selectedProtein && selectedProtein !== 'aleatorio') {
+      const f = pool.filter(m => !m.proteins || m.proteins.length === 0 || m.proteins.includes(selectedProtein));
+      if (f.length > 0) pool = f;
     }
 
-    function findDish() {
-      const area = document.getElementById('result-area');
-      let pool = meals.filter(m => !m.extraordinary && m.base.includes(selectedBase));
-
-      if (selectedProtein && selectedProtein !== 'aleatorio') {
-        const filtered = pool.filter(m => m.proteins.length === 0 || m.proteins.includes(selectedProtein));
-        if (filtered.length > 0) pool = filtered;
-      }
-
-      if (pool.length === 0) {
-        area.innerHTML = `
-          <div class="result-card">
-            <div class="no-match">
-              <span class="emoji">🤷</span>
-              Sem pratos com essa combinação.<br>Adiciona mais receitas!
-            </div>
-          </div>
-          <button class="btn-reset" onclick="reset()">↩ tentar outra combinação</button>
-        `;
-        return;
-      }
-
-      const pick = pool[Math.floor(Math.random() * pool.length)];
-      showResult(area, pick);
+    if (pool.length === 0) {
+      area.innerHTML = `<div class="result-card"><div class="empty-state"><span class="emoji">🤷</span>Sem pratos com essa combinação.<br>Adiciona mais na aba Refeições!</div></div><button class="btn-reset" onclick="reset()">↩ nova escolha</button>`;
+      return;
     }
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    const basePills = (pick.base||[]).map(b=>`<span class="pill">${baseLabels[b]||b}</span>`).join('');
+    const protPills = (pick.proteins||[]).map(p=>`<span class="pill">${proteinLabels[p]||p}</span>`).join('');
+    area.innerHTML = `
+      <div class="result-card">
+        <div class="result-tag">✓ prato encontrado</div>
+        <div class="result-name">${pick.name}</div>
+        <div class="pills">${basePills}${protPills}</div>
+      </div>
+      <button class="btn-reset" onclick="findDish()">🔀 sortear outro</button>
+      <button class="btn-reset" onclick="reset()">↩ nova escolha</button>`;
+  }
 
-    function showResult(area, dish) {
-      const basePill     = dish.base.map(b => `<span class="pill">${baseLabels[b] || b}</span>`).join('');
-      const proteinPills = dish.proteins.map(p => `<span class="pill">${proteinLabels[p] || p}</span>`).join('');
+  function findExtraordinary() {
+    const area = document.getElementById('result-area');
+    if (!allExtra.length) { area.innerHTML = `<div class="result-card"><div class="empty-state"><span class="emoji">⭐</span>Ainda sem especiais.<br>Adiciona na aba Refeições!</div></div>`; return; }
+    const pick = allExtra[Math.floor(Math.random() * allExtra.length)];
+    const recipeHtml = pick.recipe
+      ? `<button class="btn-recipe" onclick="toggleRecipe(this)">📖 Ver receita</button><div class="recipe-body" style="display:none">${pick.recipe}</div>`
+      : `<p style="font-size:12px;color:var(--text-secondary);margin-top:0.75rem">Sem receita adicionada.</p>`;
+    area.innerHTML = `
+      <div class="result-card gold">
+        <div class="result-tag">⭐ ocasião especial</div>
+        <div class="result-name">${pick.name}</div>
+        ${recipeHtml}
+      </div>
+      <button class="btn-reset" onclick="findExtraordinary()">🔀 outro especial</button>
+      <button class="btn-reset" onclick="reset()">↩ nova escolha</button>`;
+  }
 
-      area.innerHTML = `
-        <div class="result-card">
-          <div class="result-tag">✓ prato encontrado</div>
-          <div class="result-name">${dish.name}</div>
-          <div class="pills">${basePill}${proteinPills}</div>
+  function toggleRecipe(btn) {
+    const body = btn.nextElementSibling;
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    btn.textContent = open ? '📖 Ver receita' : '📖 Fechar receita';
+  }
+
+  function reset() {
+    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    selectedBase = selectedProtein = null;
+    ['divider2','step2','step3'].forEach(id => document.getElementById(id).style.display = 'none');
+    document.getElementById('result-area').innerHTML = '';
+  }
+
+  // ── MANAGE: MEALS ────────────────────────────────────────────────────────
+  async function loadMeals() {
+    try {
+      allMeals = await sb('meals?order=name') || [];
+      renderMealsList();
+    } catch(e) { document.getElementById('meals-list').innerHTML = `<div class="empty-state">Erro ao carregar.</div>`; }
+  }
+
+  function renderMealsList() {
+    const el = document.getElementById('meals-list');
+    if (!allMeals.length) { el.innerHTML = `<div class="empty-state"><span class="emoji">🍽️</span>Ainda sem refeições.</div>`; return; }
+    el.innerHTML = allMeals.map(m => {
+      const baseTags = (m.base||[]).map(b=>`<span class="meal-tag">${baseLabels[b]||b}</span>`).join('');
+      const protTags = (m.proteins||[]).map(p=>`<span class="meal-tag">${proteinLabels[p]||p}</span>`).join('');
+      return `<div class="meal-item">
+        <div class="meal-info">
+          <div class="meal-name">${m.name}</div>
+          <div class="meal-tags">${baseTags}${protTags}</div>
         </div>
-        <button class="btn-reset" onclick="findDish()">🔀 sortear outro prato</button>
-        <button class="btn-reset" onclick="reset()" style="margin-top:6px">↩ nova escolha</button>
-      `;
-    }
+        <button class="btn-delete" onclick="deleteMeal('${m.id}')" title="Apagar">✕</button>
+      </div>`;
+    }).join('');
+  }
 
-    function showExtraordinary() {
-      const area = document.getElementById('result-area');
-      const pool = meals.filter(m => m.extraordinary);
-      if (!pool.length) return;
-      const pick = pool[Math.floor(Math.random() * pool.length)];
+  async function addMeal() {
+    const name = document.getElementById('meal-name').value.trim();
+    if (!name) { toast('Escreve o nome do prato'); return; }
+    const base = [...document.querySelectorAll('input[name="base"]:checked')].map(i=>i.value);
+    const proteins = [...document.querySelectorAll('input[name="protein"]:checked')].map(i=>i.value);
+    try {
+      const result = await sb('meals','POST',{name, base, proteins});
+      allMeals.push(result[0]);
+      allMeals.sort((a,b)=>a.name.localeCompare(b.name));
+      renderMealsList();
+      document.getElementById('meal-name').value = '';
+      document.querySelectorAll('input[name="base"], input[name="protein"]').forEach(i=>i.checked=false);
+      toast('✓ Refeição guardada!');
+    } catch(e) { toast('Erro ao guardar'); }
+  }
 
-      const recipeHtml = pick.recipe
-        ? `<button class="recipe-toggle" onclick="toggleRecipe(this)">📖 Ver receita</button>
-           <div class="recipe-body" style="display:none">${pick.recipe}</div>`
-        : `<p style="font-size:13px;color:var(--text-secondary);margin-top:0.75rem">Receita ainda não adicionada.</p>`;
+  async function deleteMeal(id) {
+    if (!confirm('Apagar esta refeição?')) return;
+    try {
+      await sb(`meals?id=eq.${id}`,'DELETE');
+      allMeals = allMeals.filter(m=>m.id!==id);
+      renderMealsList();
+      toast('Refeição apagada');
+    } catch(e) { toast('Erro ao apagar'); }
+  }
 
-      area.innerHTML = `
-        <div class="result-card extraordinary">
-          <div class="result-tag">⭐ ocasião especial</div>
-          <div class="result-name">${pick.name}</div>
-          ${recipeHtml}
+  // ── MANAGE: EXTRAORDINARY ────────────────────────────────────────────────
+  async function loadExtra() {
+    try {
+      allExtra = await sb('extraordinary?order=name') || [];
+      renderExtraList();
+    } catch(e) {}
+  }
+
+  function renderExtraList() {
+    const el = document.getElementById('extra-list');
+    if (!allExtra.length) { el.innerHTML = `<div class="empty-state"><span class="emoji">⭐</span>Ainda sem especiais.</div>`; return; }
+    el.innerHTML = allExtra.map(m => `
+      <div class="meal-item gold-item">
+        <div class="meal-info">
+          <div class="meal-name">${m.name}</div>
+          ${m.recipe ? `<div class="recipe-edit-wrap"><button class="btn-edit-recipe" onclick="editRecipe('extra','${m.id}',this)">📖 ver/editar receita</button><div class="recipe-body" style="display:none">${m.recipe}</div></div>` : `<div class="recipe-edit-wrap"><button class="btn-edit-recipe" onclick="editRecipe('extra','${m.id}',this)">📝 adicionar receita</button><div class="recipe-body" style="display:none"></div></div>`}
         </div>
-        <button class="btn-reset" onclick="showExtraordinary()">🔀 outro especial</button>
-        <button class="btn-reset" onclick="reset()" style="margin-top:6px">↩ nova escolha</button>
-      `;
-    }
+        <button class="btn-delete" onclick="deleteExtra('${m.id}')" title="Apagar">✕</button>
+      </div>`).join('');
+  }
 
-    function toggleRecipe(btn) {
-      const body = btn.nextElementSibling;
-      const open = body.style.display !== 'none';
-      body.style.display = open ? 'none' : 'block';
-      btn.textContent = open ? '📖 Ver receita' : '📖 Fechar receita';
-    }
+  async function addExtraordinary() {
+    const name = document.getElementById('extra-name').value.trim();
+    if (!name) { toast('Escreve o nome'); return; }
+    const recipe = document.getElementById('extra-recipe').value.trim();
+    try {
+      const result = await sb('extraordinary','POST',{name, recipe});
+      allExtra.push(result[0]);
+      allExtra.sort((a,b)=>a.name.localeCompare(b.name));
+      renderExtraList();
+      document.getElementById('extra-name').value = '';
+      document.getElementById('extra-recipe').value = '';
+      toast('⭐ Especial guardado!');
+    } catch(e) { toast('Erro ao guardar'); }
+  }
 
-    function reset() {
-      document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-      selectedBase    = null;
-      selectedProtein = null;
-      document.getElementById('divider2').style.display = 'none';
-      document.getElementById('step2').style.display    = 'none';
-      document.getElementById('step3').style.display    = 'none';
-      document.getElementById('result-area').innerHTML  = '';
+  async function deleteExtra(id) {
+    if (!confirm('Apagar este especial?')) return;
+    try {
+      await sb(`extraordinary?id=eq.${id}`,'DELETE');
+      allExtra = allExtra.filter(m=>m.id!==id);
+      renderExtraList();
+      toast('Especial apagado');
+    } catch(e) { toast('Erro ao apagar'); }
+  }
+
+  // ── MANAGE: DESSERTS ─────────────────────────────────────────────────────
+  async function loadDesserts() {
+    try {
+      allDesserts = await sb('desserts?order=name') || [];
+      renderDessertsList();
+    } catch(e) {}
+  }
+
+  function renderDessertsList() {
+    const el = document.getElementById('desserts-list');
+    if (!allDesserts.length) { el.innerHTML = `<div class="empty-state"><span class="emoji">🍰</span>Ainda sem sobremesas.</div>`; return; }
+    el.innerHTML = allDesserts.map(m => `
+      <div class="meal-item pink-item">
+        <div class="meal-info">
+          <div class="meal-name">${m.name}</div>
+          <div class="recipe-edit-wrap"><button class="btn-edit-recipe pink-e" onclick="editRecipe('dessert','${m.id}',this)">${m.recipe ? '📖 ver/editar receita' : '📝 adicionar receita'}</button><div class="recipe-body" style="display:none">${m.recipe||''}</div></div>
+        </div>
+        <button class="btn-delete" onclick="deleteDessert('${m.id}')" title="Apagar">✕</button>
+      </div>`).join('');
+  }
+
+  async function addDessert() {
+    const name = document.getElementById('dessert-name').value.trim();
+    if (!name) { toast('Escreve o nome'); return; }
+    const recipe = document.getElementById('dessert-recipe').value.trim();
+    try {
+      const result = await sb('desserts','POST',{name, recipe});
+      allDesserts.push(result[0]);
+      allDesserts.sort((a,b)=>a.name.localeCompare(b.name));
+      renderDessertsList();
+      document.getElementById('dessert-name').value = '';
+      document.getElementById('dessert-recipe').value = '';
+      toast('🍰 Sobremesa guardada!');
+    } catch(e) { toast('Erro ao guardar'); }
+  }
+
+  async function deleteDessert(id) {
+    if (!confirm('Apagar esta sobremesa?')) return;
+    try {
+      await sb(`desserts?id=eq.${id}`,'DELETE');
+      allDesserts = allDesserts.filter(m=>m.id!==id);
+      renderDessertsList();
+      toast('Sobremesa apagada');
+    } catch(e) { toast('Erro ao apagar'); }
+  }
+
+  // ── RECIPE EDIT (inline) ──────────────────────────────────────────────────
+  function editRecipe(type, id, btn) {
+    const body = btn.nextElementSibling;
+    if (body.style.display !== 'none') {
+      body.style.display = 'none';
+      btn.textContent = body.textContent.trim() ? (type==='dessert'?'📖':'📖') + ' ver/editar receita' : '📝 adicionar receita';
+      return;
     }
-  </script>
+    const current = body.textContent.trim();
+    body.style.display = 'block';
+    body.innerHTML = `<textarea class="form-textarea" style="margin-top:0.5rem" placeholder="Ingredientes e passos...">${current}</textarea>
+      <button class="btn-add ${type==='dessert'?'pink-add':'gold-add'}" style="margin-top:0.5rem" onclick="saveRecipe('${type}','${id}',this)">Guardar receita</button>`;
+  }
+
+  async function saveRecipe(type, id, btn) {
+    const ta = btn.previousElementSibling;
+    const recipe = ta.value.trim();
+    const table = type === 'dessert' ? 'desserts' : 'extraordinary';
+    try {
+      await sb(`${table}?id=eq.${id}`, 'PATCH', { recipe });
+      if (type === 'dessert') { const m = allDesserts.find(m=>m.id===id); if(m) m.recipe=recipe; renderDessertsList(); }
+      else { const m = allExtra.find(m=>m.id===id); if(m) m.recipe=recipe; renderExtraList(); }
+      toast('✓ Receita guardada!');
+    } catch(e) { toast('Erro ao guardar receita'); }
+  }
+
+  // ── INIT ──────────────────────────────────────────────────────────────────
+  async function init() {
+    await Promise.all([loadMeals(), loadExtra(), loadDesserts()]);
+  }
+  init();
+</script>
 </body>
 </html>
