@@ -55,27 +55,29 @@
       background: var(--bg); color: var(--text-primary);
       min-height: 100vh; display: flex;
       align-items: flex-start; justify-content: center;
+      overflow-x: hidden; width: 100%;
     }
 
-    .app { width: 100%; max-width: 460px; overflow-x: hidden; }
+    .app { width: 100%; max-width: 460px; overflow-x: hidden; position: relative; }
 
     /* ── TABS ── */
     .tabs {
       position: sticky; top: 0; z-index: 10;
       background: var(--bg);
       border-bottom: 1px solid var(--border);
-      display: flex; padding: 0 1rem;
+      display: flex; padding: 0;
+      width: 100%; overflow: hidden;
     }
     .tab-btn {
-      flex: 1; padding: 1rem 0.5rem 0.85rem;
+      flex: 1; padding: 0.85rem 0.25rem 0.75rem;
       background: none; border: none; border-bottom: 2px solid transparent;
-      font-family: inherit; font-size: 13px; font-weight: 500;
+      font-family: inherit; font-size: 11px; font-weight: 500;
       color: var(--text-secondary); cursor: pointer;
       transition: color 0.15s, border-color 0.15s;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-      line-height: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      line-height: 1; min-width: 0;
     }
-    .tab-btn span.tab-icon { font-size: 15px; line-height: 1; display: flex; align-items: center; }
+    .tab-btn span.tab-icon { font-size: 18px; line-height: 1; display: flex; align-items: center; }
     .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
 
     /* ── PAGES ── */
