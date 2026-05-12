@@ -66,6 +66,9 @@
       display: flex;
       flex-direction: column;
     }
+    .page-wrap {
+      flex: 1;
+    }
 
     /* ── TABS ── */
     .tabs {
@@ -75,6 +78,7 @@
       display: flex;
       width: 100%;
       flex-shrink: 0;
+      box-shadow: 0 1px 0 var(--border);
     }
     .tab-btn {
       flex: 1; padding: 0.85rem 0.25rem 0.75rem;
@@ -369,6 +373,7 @@
     <button class="tab-btn" onclick="switchTab('historico')"><span class="tab-icon">📅</span> Histórico</button>
   </nav>
 
+  <div class="page-wrap">
   <!-- ══ PAGE: SORTEAR ══════════════════════════════════════════════════════ -->
   <div class="page active" id="page-sorte">
     <header>
@@ -555,6 +560,8 @@
     </div>
     <div class="day-modal-overlay" id="day-modal-overlay" onclick="closeModal()" style="display:none"></div>
   </div>
+
+  </div><!-- /page-wrap -->
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
