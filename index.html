@@ -360,6 +360,95 @@
     .day-modal-date { font-size: 13px; color: var(--text-secondary); margin-bottom: 0.25rem; }
     .day-modal-current { font-size: 15px; font-weight: 500; min-height: 1.5rem; }
 
+
+    /* ── SHOPPING ── */
+    .store-tabs {
+      display: flex; gap: 6px; margin-bottom: 1.5rem;
+    }
+    .store-tab {
+      flex: 1; padding: 0.6rem 0.25rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-md); font-family: inherit;
+      font-size: 12px; font-weight: 500; color: var(--text-secondary);
+      cursor: pointer; transition: all 0.15s; text-align: center;
+    }
+    .store-tab.active {
+      background: var(--green-light); border-color: var(--green);
+      color: var(--green-text);
+    }
+    .store-page { display: none; }
+    .store-page.active { display: block; }
+
+    .shop-add-row {
+      display: flex; gap: 8px; margin-bottom: 1.25rem; align-items: center;
+    }
+    .shop-add-row .form-input { flex: 1; }
+    .qty-input {
+      width: 56px; padding: 0.65rem 0.5rem;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius-md); font-family: inherit; font-size: 14px;
+      color: var(--text-primary); text-align: center; outline: none;
+    }
+    .qty-input:focus { border-color: var(--green); }
+    .btn-shop-add {
+      width: 40px; height: 40px; border-radius: var(--radius-md);
+      background: var(--green); color: white; border: none;
+      font-size: 20px; cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .btn-shop-add:hover { background: var(--green-dark); }
+
+    .shop-list { display: flex; flex-direction: column; gap: 6px; }
+    .shop-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 0.75rem 1rem;
+      display: flex; align-items: center; gap: 10px;
+      transition: opacity 0.2s;
+    }
+    .shop-item.checked { opacity: 0.45; }
+    .shop-check {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid var(--border-strong); background: none;
+      cursor: pointer; flex-shrink: 0; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .shop-item.checked .shop-check {
+      background: var(--green); border-color: var(--green);
+    }
+    .shop-check-tick { display: none; color: white; font-size: 11px; font-weight: 700; }
+    .shop-item.checked .shop-check-tick { display: block; }
+    .shop-item-name {
+      flex: 1; font-size: 14px; font-weight: 500;
+      transition: text-decoration 0.15s;
+    }
+    .shop-item.checked .shop-item-name { text-decoration: line-through; }
+    .shop-item-qty {
+      font-size: 12px; color: var(--text-secondary);
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 999px; padding: 2px 8px; flex-shrink: 0;
+    }
+    .shop-item.checked .shop-item-qty { opacity: 0.5; }
+    .btn-shop-del {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-secondary); font-size: 14px; padding: 2px;
+      flex-shrink: 0; transition: color 0.15s;
+    }
+    .btn-shop-del:hover { color: var(--red); }
+
+    .shop-footer {
+      margin-top: 1rem; display: flex; gap: 8px;
+    }
+    .btn-shop-clear {
+      flex: 1; padding: 0.7rem; border-radius: var(--radius-md);
+      background: transparent; border: 1px solid var(--border);
+      font-size: 13px; color: var(--text-secondary); cursor: pointer;
+      font-family: inherit; transition: background 0.15s;
+    }
+    .btn-shop-clear:hover { background: var(--surface); }
+    .shop-empty { text-align: center; padding: 2rem 1rem; color: var(--text-secondary); font-size: 14px; }
+    .shop-empty .emoji { font-size: 28px; display: block; margin-bottom: 0.5rem; }
+
   </style>
 </head>
 <body>
@@ -371,6 +460,7 @@
     <button class="tab-btn" onclick="switchTab('refeicoes')"><span class="tab-icon">🍽️</span> Refeições</button>
     <button class="tab-btn" onclick="switchTab('sobremesas')"><span class="tab-icon">🍰</span> Sobremesas</button>
     <button class="tab-btn" onclick="switchTab('historico')"><span class="tab-icon">📅</span> Histórico</button>
+    <button class="tab-btn" onclick="switchTab('compras')"><span class="tab-icon">🛒</span> Compras</button>
   </nav>
 
   <div class="page-wrap">
@@ -561,6 +651,64 @@
     <div class="day-modal-overlay" id="day-modal-overlay" onclick="closeModal()" style="display:none"></div>
   </div>
 
+
+  <!-- ══ PAGE: COMPRAS ════════════════════════════════════════════════════ -->
+  <div class="page" id="page-compras">
+    <header>
+      <h1>Compras 🛒</h1>
+      <p>Listas por loja.</p>
+    </header>
+
+    <!-- Store tabs -->
+    <div class="store-tabs">
+      <button class="store-tab active" onclick="switchStore('pingo_doce', this)">🟡 Pingo Doce</button>
+      <button class="store-tab" onclick="switchStore('mercadona', this)">🟢 Mercadona</button>
+      <button class="store-tab" onclick="switchStore('continente', this)">🔵 Continente</button>
+    </div>
+
+    <!-- Pingo Doce -->
+    <div class="store-page active" id="store-pingo_doce">
+      <div class="shop-add-row">
+        <input class="form-input" type="text" placeholder="Artigo..." id="shop-input-pingo_doce" onkeydown="if(event.key==='Enter') addShopItem('pingo_doce')" />
+        <input class="qty-input" type="number" min="1" value="1" id="shop-qty-pingo_doce" />
+        <button class="btn-shop-add" onclick="addShopItem('pingo_doce')">+</button>
+      </div>
+      <div class="shop-list" id="shop-list-pingo_doce"></div>
+      <div class="shop-footer" id="shop-footer-pingo_doce" style="display:none">
+        <button class="btn-shop-clear" onclick="clearChecked('pingo_doce')">✓ Remover comprados</button>
+        <button class="btn-shop-clear" onclick="clearAll('pingo_doce')">🗑 Limpar tudo</button>
+      </div>
+    </div>
+
+    <!-- Mercadona -->
+    <div class="store-page" id="store-mercadona">
+      <div class="shop-add-row">
+        <input class="form-input" type="text" placeholder="Artigo..." id="shop-input-mercadona" onkeydown="if(event.key==='Enter') addShopItem('mercadona')" />
+        <input class="qty-input" type="number" min="1" value="1" id="shop-qty-mercadona" />
+        <button class="btn-shop-add" onclick="addShopItem('mercadona')">+</button>
+      </div>
+      <div class="shop-list" id="shop-list-mercadona"></div>
+      <div class="shop-footer" id="shop-footer-mercadona" style="display:none">
+        <button class="btn-shop-clear" onclick="clearChecked('mercadona')">✓ Remover comprados</button>
+        <button class="btn-shop-clear" onclick="clearAll('mercadona')">🗑 Limpar tudo</button>
+      </div>
+    </div>
+
+    <!-- Continente -->
+    <div class="store-page" id="store-continente">
+      <div class="shop-add-row">
+        <input class="form-input" type="text" placeholder="Artigo..." id="shop-input-continente" onkeydown="if(event.key==='Enter') addShopItem('continente')" />
+        <input class="qty-input" type="number" min="1" value="1" id="shop-qty-continente" />
+        <button class="btn-shop-add" onclick="addShopItem('continente')">+</button>
+      </div>
+      <div class="shop-list" id="shop-list-continente"></div>
+      <div class="shop-footer" id="shop-footer-continente" style="display:none">
+        <button class="btn-shop-clear" onclick="clearChecked('continente')">✓ Remover comprados</button>
+        <button class="btn-shop-clear" onclick="clearAll('continente')">🗑 Limpar tudo</button>
+      </div>
+    </div>
+  </div>
+
   </div><!-- /page-wrap -->
 
 <!-- Toast -->
@@ -608,6 +756,7 @@
     document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
     document.getElementById(`page-${tab}`).classList.add('active');
     if (tab === 'historico') { loadHistory().then(() => renderCalendar()); }
+    if (tab === 'compras') { loadShopping(); }
   }
 
   // ── TOAST ────────────────────────────────────────────────────────────────
@@ -1011,9 +1160,115 @@
     } catch(e) { toast('Erro ao registar'); }
   }
 
+
+  // ── SHOPPING ─────────────────────────────────────────────────────────────
+  let shopData = { pingo_doce: [], mercadona: [], continente: [] };
+  let activeStore = 'pingo_doce';
+
+  function switchStore(store, btn) {
+    document.querySelectorAll('.store-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.store-page').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('store-' + store).classList.add('active');
+    activeStore = store;
+  }
+
+  async function loadShopping() {
+    try {
+      const rows = await sb('shopping?order=created_at.asc') || [];
+      shopData = { pingo_doce: [], mercadona: [], continente: [] };
+      rows.forEach(r => {
+        if (shopData[r.store]) shopData[r.store].push(r);
+      });
+      ['pingo_doce','mercadona','continente'].forEach(s => renderShopList(s));
+    } catch(e) { console.error('loadShopping', e); }
+  }
+
+  function renderShopList(store) {
+    const list = document.getElementById('shop-list-' + store);
+    const footer = document.getElementById('shop-footer-' + store);
+    const items = shopData[store];
+
+    if (!items.length) {
+      list.innerHTML = '<div class="shop-empty"><span class="emoji">🛒</span>Lista vazia.<br>Adiciona artigos acima.</div>';
+      footer.style.display = 'none';
+      return;
+    }
+
+    // unchecked first, then checked
+    const sorted = [...items].sort((a,b) => a.checked - b.checked);
+    list.innerHTML = sorted.map(item => `
+      <div class="shop-item ${item.checked ? 'checked' : ''}" id="shop-item-${item.id}">
+        <button class="shop-check" onclick="toggleShopItem('${item.id}','${store}')">
+          <span class="shop-check-tick">✓</span>
+        </button>
+        <span class="shop-item-name">${item.name}</span>
+        <span class="shop-item-qty">x${item.quantity}</span>
+        <button class="btn-shop-del" onclick="deleteShopItem('${item.id}','${store}')">✕</button>
+      </div>
+    `).join('');
+    footer.style.display = 'flex';
+  }
+
+  async function addShopItem(store) {
+    const nameEl = document.getElementById('shop-input-' + store);
+    const qtyEl  = document.getElementById('shop-qty-' + store);
+    const name = nameEl.value.trim();
+    if (!name) { nameEl.focus(); return; }
+    const quantity = Math.max(1, parseInt(qtyEl.value) || 1);
+    try {
+      const res = await sb('shopping', 'POST', { store, name, quantity, checked: false });
+      shopData[store].push(res[0]);
+      renderShopList(store);
+      nameEl.value = '';
+      qtyEl.value = '1';
+      nameEl.focus();
+    } catch(e) { toast('Erro ao adicionar'); }
+  }
+
+  async function toggleShopItem(id, store) {
+    const item = shopData[store].find(i => i.id === id);
+    if (!item) return;
+    const newChecked = !item.checked;
+    try {
+      await sb('shopping?id=eq.' + id, 'PATCH', { checked: newChecked });
+      item.checked = newChecked;
+      renderShopList(store);
+    } catch(e) { toast('Erro'); }
+  }
+
+  async function deleteShopItem(id, store) {
+    try {
+      await sb('shopping?id=eq.' + id, 'DELETE');
+      shopData[store] = shopData[store].filter(i => i.id !== id);
+      renderShopList(store);
+    } catch(e) { toast('Erro ao apagar'); }
+  }
+
+  async function clearChecked(store) {
+    const checked = shopData[store].filter(i => i.checked);
+    if (!checked.length) { toast('Nenhum artigo comprado'); return; }
+    try {
+      await sb('shopping?store=eq.' + store + '&checked=eq.true', 'DELETE');
+      shopData[store] = shopData[store].filter(i => !i.checked);
+      renderShopList(store);
+      toast('✓ Comprados removidos');
+    } catch(e) { toast('Erro'); }
+  }
+
+  async function clearAll(store) {
+    if (!confirm('Limpar toda a lista?')) return;
+    try {
+      await sb('shopping?store=eq.' + store, 'DELETE');
+      shopData[store] = [];
+      renderShopList(store);
+      toast('Lista limpa');
+    } catch(e) { toast('Erro'); }
+  }
+
   // ── INIT ──────────────────────────────────────────────────────────────────
   async function init() {
-    await Promise.all([loadMeals(), loadExtra(), loadDesserts(), loadHistory()]);
+    await Promise.all([loadMeals(), loadExtra(), loadDesserts(), loadHistory(), loadShopping()]);
     initCalendar();
   }
   init();
