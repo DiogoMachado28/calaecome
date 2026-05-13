@@ -68,7 +68,6 @@
     }
     .page-wrap {
       flex: 1;
-      padding-top: 70px;
     }
 
     /* ── TABS ── */
@@ -95,7 +94,7 @@
     .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
 
     /* ── PAGES ── */
-    .page { display: none; padding: 1.5rem 1rem 4rem; width: 100%; box-sizing: border-box; }
+    .page { display: none; padding: 70px 1rem 4rem; width: 100%; box-sizing: border-box; }
     .page.active { display: block; }
 
     /* ── HEADER ── */
@@ -613,10 +612,12 @@
     <div class="meal-list" id="desserts-list"><div class="loading">A carregar...</div></div>
   </div>
 
-</div>
-
-<!-- ══ PAGE: HISTÓRICO ══════════════════════════════════════════════════ -->
+  <!-- ══ PAGE: HISTÓRICO ══════════════════════════════════════════════════ -->
   <div class="page" id="page-historico">
+    <header>
+      <h1>Histórico 📅</h1>
+      <p>O que cozinharam cada dia.</p>
+    </header>
 
     <!-- Calendar nav -->
     <div class="cal-nav" style="width:100%">
@@ -652,6 +653,10 @@
 
   <!-- ══ PAGE: COMPRAS ════════════════════════════════════════════════════ -->
   <div class="page" id="page-compras">
+    <header>
+      <h1>Compras 🛒</h1>
+      <p>Listas por loja.</p>
+    </header>
 
     <!-- Store tabs -->
     <div class="store-tabs">
