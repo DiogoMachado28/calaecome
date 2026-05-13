@@ -405,9 +405,21 @@
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius-md); padding: 0.75rem 1rem;
       display: flex; align-items: center; gap: 10px;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, box-shadow 0.2s, transform 0.15s;
+      touch-action: none;
+      user-select: none;
     }
     .shop-item.checked { opacity: 0.45; }
+    .shop-item.dragging {
+      opacity: 0.5; box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      transform: scale(1.02); z-index: 10; position: relative;
+    }
+    .shop-item.drag-over { border-color: var(--green); background: var(--green-light); }
+    .drag-handle {
+      color: var(--text-secondary); font-size: 16px; cursor: grab;
+      flex-shrink: 0; padding: 2px 4px; touch-action: none;
+    }
+    .drag-handle:active { cursor: grabbing; }
     .shop-check {
       width: 20px; height: 20px; border-radius: 50%;
       border: 2px solid var(--border-strong); background: none;
@@ -1174,7 +1186,7 @@
 
   async function loadShopping() {
     try {
-      const rows = await sb('shopping?order=created_at.asc') || [];
+      const rows = await sb('shopping?order=position.asc,created_at.asc') || [];
       shopData = { pingo_doce: [], mercadona: [], continente: [] };
       rows.forEach(r => {
         if (shopData[r.store]) shopData[r.store].push(r);
@@ -1194,10 +1206,9 @@
       return;
     }
 
-    // unchecked first, then checked
-    const sorted = [...items].sort((a,b) => a.checked - b.checked);
-    list.innerHTML = sorted.map(item => `
-      <div class="shop-item ${item.checked ? 'checked' : ''}" id="shop-item-${item.id}">
+    list.innerHTML = items.map(item => `
+      <div class="shop-item ${item.checked ? 'checked' : ''}" id="shop-item-${item.id}" data-id="${item.id}" data-store="${store}">
+        <span class="drag-handle" title="Arrastar">⠿</span>
         <button class="shop-check" onclick="toggleShopItem('${item.id}','${store}')">
           <span class="shop-check-tick">✓</span>
         </button>
@@ -1206,6 +1217,7 @@
         <button class="btn-shop-del" onclick="deleteShopItem('${item.id}','${store}')">✕</button>
       </div>
     `).join('');
+    initDragDrop(store);
     footer.style.display = 'flex';
   }
 
@@ -1216,7 +1228,8 @@
     if (!name) { nameEl.focus(); return; }
     const quantity = Math.max(1, parseInt(qtyEl.value) || 1);
     try {
-      const res = await sb('shopping', 'POST', { store, name, quantity, checked: false });
+      const maxPos = shopData[store].length ? Math.max(...shopData[store].map(i => i.position || 0)) + 1 : 0;
+      const res = await sb('shopping', 'POST', { store, name, quantity, checked: false, position: maxPos });
       shopData[store].push(res[0]);
       renderShopList(store);
       nameEl.value = '';
@@ -1263,6 +1276,88 @@
       renderShopList(store);
       toast('Lista limpa');
     } catch(e) { toast('Erro'); }
+  }
+
+
+  // ── DRAG & DROP (touch + mouse) ──────────────────────────────────────────
+  let dragSrc = null, dragStore = null;
+
+  function initDragDrop(store) {
+    const list = document.getElementById('shop-list-' + store);
+    if (!list) return;
+    const items = list.querySelectorAll('.shop-item');
+
+    items.forEach(item => {
+      const handle = item.querySelector('.drag-handle');
+
+      // Mouse events
+      handle.addEventListener('mousedown', e => startDrag(e, item, store, 'mouse'));
+
+      // Touch events
+      handle.addEventListener('touchstart', e => startDrag(e, item, store, 'touch'), { passive: false });
+    });
+  }
+
+  function startDrag(e, item, store, type) {
+    e.preventDefault();
+    dragSrc = item;
+    dragStore = store;
+    item.classList.add('dragging');
+
+    const list = document.getElementById('shop-list-' + store);
+    const items = () => [...list.querySelectorAll('.shop-item:not(.dragging)')];
+
+    const getY = ev => type === 'touch' ? ev.touches[0].clientY : ev.clientY;
+
+    function onMove(ev) {
+      ev.preventDefault();
+      const y = getY(ev);
+      items().forEach(other => other.classList.remove('drag-over'));
+
+      const closest = items().reduce((best, el) => {
+        const box = el.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > (best.offset || -Infinity)) {
+          return { offset, el };
+        }
+        return best;
+      }, {});
+
+      if (closest.el) {
+        closest.el.classList.add('drag-over');
+        list.insertBefore(dragSrc, closest.el);
+      } else {
+        list.appendChild(dragSrc);
+      }
+    }
+
+    function onEnd() {
+      item.classList.remove('dragging');
+      items().forEach(other => other.classList.remove('drag-over'));
+      saveDragOrder(store);
+      document.removeEventListener(type === 'touch' ? 'touchmove' : 'mousemove', onMove);
+      document.removeEventListener(type === 'touch' ? 'touchend' : 'mouseup', onEnd);
+    }
+
+    document.addEventListener(type === 'touch' ? 'touchmove' : 'mousemove', onMove, { passive: false });
+    document.addEventListener(type === 'touch' ? 'touchend' : 'mouseup', onEnd);
+  }
+
+  async function saveDragOrder(store) {
+    const list = document.getElementById('shop-list-' + store);
+    const els = [...list.querySelectorAll('.shop-item')];
+    const updates = els.map((el, i) => ({ id: el.dataset.id, position: i }));
+
+    // Update local state order
+    const idOrder = updates.map(u => u.id);
+    shopData[store].sort((a, b) => idOrder.indexOf(a.id) - idOrder.indexOf(b.id));
+
+    // Save to Supabase in parallel
+    try {
+      await Promise.all(updates.map(u =>
+        sb('shopping?id=eq.' + u.id, 'PATCH', { position: u.position })
+      ));
+    } catch(e) { console.error('saveDragOrder', e); }
   }
 
   // ── INIT ──────────────────────────────────────────────────────────────────
